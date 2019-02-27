@@ -13,6 +13,7 @@ class ColunmRowApp extends Component {
 			tasks: []
 		}
 		this.changeColumnRow = this.changeColumnRow.bind(this);
+		this.insertWork = this.insertWork.bind(this);
 	}
 
 	setDataTable(){
@@ -73,12 +74,23 @@ class ColunmRowApp extends Component {
 		this.hiddenRowData(number+'');
 	}
 
+	insertWork(work){
+		var newWork = {
+			id: this.guidGenerator(),
+			name: work.name.value,
+			status: work.status.checked
+		}
+		this.setState({
+			tasks: [...this.state.tasks ,newWork]
+		})
+		localStorage.setItem("tasks", JSON.stringify(this.state.tasks));
+	}
+
 	render() {
-		console.log(this.state.tasks);
 		return (
 			<div className="row">
 				<div className="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="row-hidden-add">
-					<PanelAdd />
+					<PanelAdd insertWork={this.insertWork} />
 				</div>
 				<div className={"col-xs-"+this.state.weightRow+ " col-sm-"+this.state.weightRow}>
 					<RowAdd number={this.state.weightRow} changeColumnRow={this.changeColumnRow} />

@@ -14,7 +14,7 @@ class PanelTable extends Component {
   	var listData = this.props.listData;
   	var rowListData = listData.map((row,index)=>{
   		return (
-  			<tr>
+  			<tr key={row.id}>
 				<td>{index+1}</td>
 				<td>{row.name}</td>
 				<td className="text-center">
