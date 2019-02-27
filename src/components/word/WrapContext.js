@@ -9,8 +9,6 @@ class WrapContext extends Component {
 		
 	}
 
-	
-
 	render() {
 
 		return (

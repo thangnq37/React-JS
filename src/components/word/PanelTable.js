@@ -3,11 +3,15 @@ import React, { Component } from 'react';
 class PanelTable extends Component {
 
   btnUpdateRow = (id)=>{
-  	alert(id);
+  	this.props.updateRowWork(id);
   }
 
   btnDeleteRow = (id)=>{
   	alert(id);
+  }
+
+  updateStatusWork = (id)=>{
+  	this.props.updateStatusWork(id);
   }
 
   render() {
@@ -18,7 +22,7 @@ class PanelTable extends Component {
 				<td>{index+1}</td>
 				<td>{row.name}</td>
 				<td className="text-center">
-					{row.status===true?<span className="label label-success">Kích Hoạt</span>:<span className="label label-danger">Xác Nhận</span>}
+					{row.status===true?<span className="label label-success" onClick={()=>this.updateStatusWork(row.id)}>Kích Hoạt</span>:<span className="label label-danger" onClick={()=>this.updateStatusWork(row.id)}>Xác Nhận</span>}
 				</td>
 				<td className="text-center">
 					<button type="button" onClick={()=>this.btnUpdateRow(row.id)} className="btn btn-warning btn-xs">Sữa</button>	

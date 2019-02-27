@@ -9,11 +9,15 @@ class ColunmRowApp extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
+			apply:true,//true add false update
 			weightRow: '12',
 			tasks: []
 		}
 		this.changeColumnRow = this.changeColumnRow.bind(this);
 		this.insertWork = this.insertWork.bind(this);
+		this.updateStatusWork = this.updateStatusWork.bind(this);
+		this.updateRowWork = this.updateRowWork.bind(this);
+		this.changePanelAdd = this.changePanelAdd.bind(this);
 	}
 
 	setDataTable(){
@@ -35,7 +39,7 @@ class ColunmRowApp extends Component {
 			}
 		];
 
-		localStorage.setItem("tasks", JSON.stringify(tasks));
+		this.setLocalStorageTasks(tasks);
 	}
 
 	guidGenerator() {
@@ -69,35 +73,71 @@ class ColunmRowApp extends Component {
 
 	changeColumnRow(number){
 		this.setState({
-			weightRow: number+''
+			weightRow: number+'',
+			apply: true
 		});
 		this.hiddenRowData(number+'');
 	}
 
 	insertWork(work){
+		var tasks = this.state.tasks;
 		var newWork = {
 			id: this.guidGenerator(),
 			name: work.name.value,
 			status: work.status.checked
 		}
+		tasks.push(newWork); 
 		this.setState({
-			tasks: [...this.state.tasks ,newWork]
-		})
-		localStorage.setItem("tasks", JSON.stringify(this.state.tasks));
+			tasks: [...tasks]
+		});
+		this.setLocalStorageTasks(tasks);
 	}
+
+	setLocalStorageTasks(tasks){
+		localStorage.setItem("tasks", JSON.stringify(tasks));
+	}
+
+	updateStatusWork(id){
+		var tasks = this.state.tasks;
+		tasks.forEach((item,index)=>{
+			if(item.id === id){
+				item.status = !item.status;
+				return false;
+			}
+		})
+		this.setState({
+			tasks: [...tasks]
+		});
+		this.setLocalStorageTasks(tasks);
+	}
+
+	updateRowWork(id){
+		this.changeColumnRow('8');
+		this.setState({
+			apply: false
+		})
+	}
+
+	changePanelAdd(){
+		alert("1234");
+		this.setState({
+			apply: false
+		})
+	}
+
 
 	render() {
 		return (
 			<div className="row">
 				<div className="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="row-hidden-add">
-					<PanelAdd insertWork={this.insertWork} />
+					<PanelAdd changePanelAdd={this.changePanelAdd}  apply={this.state.apply} insertWork={this.insertWork} />
 				</div>
 				<div className={"col-xs-"+this.state.weightRow+ " col-sm-"+this.state.weightRow}>
 					<RowAdd number={this.state.weightRow} changeColumnRow={this.changeColumnRow} />
 					<br />
 					<RowSearch />
 					<br />
-					<PanelTable listData={this.state.tasks} />
+					<PanelTable updateRowWork={this.updateRowWork} updateStatusWork={this.updateStatusWork} listData={this.state.tasks} />
 				</div>
 			</div>
 		);
