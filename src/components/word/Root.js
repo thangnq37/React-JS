@@ -9,7 +9,7 @@ class Root extends Component {
     return (
       <div className="container">
         <div className="row">
-          <div className="alert alert-info text-center">
+          <div className="alert alert-success text-center">
             <strong>Quản lý công việc</strong>
           </div>
         </div>

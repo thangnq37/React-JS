@@ -11,13 +11,28 @@ class ColunmRowApp extends Component {
 		this.state = {
 			apply:true,//true add false update
 			weightRow: '12',
-			tasks: []
-		}
+			tasks: [],
+			objectTask: {
+				id: '',
+				name: "",
+				status: false
+			}
+		};
 		this.changeColumnRow = this.changeColumnRow.bind(this);
 		this.insertWork = this.insertWork.bind(this);
 		this.updateStatusWork = this.updateStatusWork.bind(this);
 		this.updateRowWork = this.updateRowWork.bind(this);
 		this.changePanelAdd = this.changePanelAdd.bind(this);
+		this.deleteRowWork = this.deleteRowWork.bind(this);
+		this.btnUpdateWord = this.btnUpdateWord.bind(this);
+	}
+
+
+	guidGenerator() {
+	    var S4 = function() {
+	       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+	    };
+	    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
 	}
 
 	setDataTable(){
@@ -42,12 +57,7 @@ class ColunmRowApp extends Component {
 		this.setLocalStorageTasks(tasks);
 	}
 
-	guidGenerator() {
-	    var S4 = function() {
-	       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
-	    };
-	    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
-	}
+	
 
 	componentDidMount(){
 		this.hiddenRowData(this.state.weightRow);
@@ -113,31 +123,83 @@ class ColunmRowApp extends Component {
 
 	updateRowWork(id){
 		this.changeColumnRow('8');
+
+		var tasks = this.state.tasks;
+		var objectTask = tasks.find((item)=>{
+			return item.id === id;
+		})
+		
 		this.setState({
-			apply: false
+			apply: false,
+			objectTask: objectTask
 		})
 	}
 
 	changePanelAdd(){
-		alert("1234");
 		this.setState({
-			apply: false
+			apply: true
 		})
 	}
 
+	insertWork(work){
+		var tasks = this.state.tasks;
+		var newWork = {
+			id: this.guidGenerator(),
+			name: work.name.value,
+			status: work.status.checked
+		}
+		tasks.push(newWork); 
+		this.setState({
+			tasks: [...tasks]
+		});
+		this.setLocalStorageTasks(tasks);
+	}
+
+	deleteRowWork(id){
+		var tasks = this.state.tasks;
+		tasks.forEach((item,index)=>{
+			if(item.id === id){
+				tasks.splice(index,1);
+				return false;
+			}
+		})
+		this.setState({
+			tasks: [...tasks]
+		});
+		this.setLocalStorageTasks(tasks);
+	}
+
+	btnUpdateWord(work){
+		var tasks = this.state.tasks;
+		var newWork = {
+			id: work.id.value,
+			name: work.name.value,
+			status: work.status.checked
+		}
+		tasks.forEach((item,index)=>{
+			if(item.id === work.id.value){
+				item.status = newWork;
+				return false;
+			}
+		})
+		this.setState({
+			tasks: [...tasks]
+		});
+		this.setLocalStorageTasks(tasks);
+	}
 
 	render() {
 		return (
 			<div className="row">
 				<div className="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="row-hidden-add">
-					<PanelAdd changePanelAdd={this.changePanelAdd}  apply={this.state.apply} insertWork={this.insertWork} />
+					<PanelAdd changePanelAdd={this.changePanelAdd} btnUpdateWord={this.btnUpdateWord} objectTask={this.state.objectTask}  apply={this.state.apply} insertWork={this.insertWork} />
 				</div>
 				<div className={"col-xs-"+this.state.weightRow+ " col-sm-"+this.state.weightRow}>
 					<RowAdd number={this.state.weightRow} changeColumnRow={this.changeColumnRow} />
 					<br />
 					<RowSearch />
 					<br />
-					<PanelTable updateRowWork={this.updateRowWork} updateStatusWork={this.updateStatusWork} listData={this.state.tasks} />
+					<PanelTable deleteRowWork={this.deleteRowWork} updateRowWork={this.updateRowWork} updateStatusWork={this.updateStatusWork} listData={this.state.tasks} />
 				</div>
 			</div>
 		);

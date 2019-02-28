@@ -7,7 +7,7 @@ class PanelTable extends Component {
   }
 
   btnDeleteRow = (id)=>{
-  	alert(id);
+  	this.props.deleteRowWork(id);
   }
 
   updateStatusWork = (id)=>{
