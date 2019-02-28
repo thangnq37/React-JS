@@ -15,12 +15,26 @@ class PanelAdd extends Component {
 		this.onChangeData = this.onChangeData.bind(this);
 	}
 
+	componentWillMount(){
+		var objectTask = this.props.objectTask;
+		this.setState({
+			objectTask: objectTask
+		})
+	}
+
+	componentWillReceiveProps(nextProps){
+		var objectTask = nextProps.objectTask;
+		this.setState({
+			objectTask: objectTask
+		})
+	}
+
 	btnAddWord = () =>{
 		this.props.insertWork(this.refs);
 	}
 
 	btnUpdateWord = () =>{
-		// this.props.btnUpdateWord(this.refs);
+		this.props.btnUpdateWord(this.refs);
 	}
 
 	changePanelAdd = () =>{
@@ -39,12 +53,7 @@ class PanelAdd extends Component {
 		})
 	}
 
-	componentWillMount(){
-		var objectTask = this.props.objectTask;
-		this.setState({
-			objectTask: objectTask
-		})
-	}
+
 
 	render() {
 		var apply = this.props.apply;
@@ -61,7 +70,7 @@ class PanelAdd extends Component {
 						<input type="hidden" ref="id" value={this.state.objectTask.id} />
 					</div>
 					<div className="form-group">
-						<label>Trạng thái: <input type="checkbox" ref="status" checked={this.state.objectTask.checked} onChange={this.onChangeData} /></label>
+						<label>Trạng thái: <input type="checkbox" ref="status" checked={this.state.objectTask.status} onChange={this.onChangeData} /></label>
 					</div>
 					<button type="button" onClick={apply === true?this.btnAddWord:this.btnUpdateWord} className={apply === true?"btn btn-info":"btn btn-warning"}>{apply === true?"Thêm":"Sữa"}</button>
 					{button}

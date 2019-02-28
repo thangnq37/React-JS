@@ -12,11 +12,7 @@ class ColunmRowApp extends Component {
 			apply:true,//true add false update
 			weightRow: '12',
 			tasks: [],
-			objectTask: {
-				id: '',
-				name: "",
-				status: false
-			}
+			objectTask: {}
 		};
 		this.changeColumnRow = this.changeColumnRow.bind(this);
 		this.insertWork = this.insertWork.bind(this);
@@ -98,7 +94,12 @@ class ColunmRowApp extends Component {
 		}
 		tasks.push(newWork); 
 		this.setState({
-			tasks: [...tasks]
+			tasks: [...tasks],
+			objectTask: {
+				id:'',
+				name: '',
+				status: false
+			}
 		});
 		this.setLocalStorageTasks(tasks);
 	}
@@ -137,22 +138,13 @@ class ColunmRowApp extends Component {
 
 	changePanelAdd(){
 		this.setState({
-			apply: true
+			apply: true,
+			objectTask: {
+				id:'',
+				name: '',
+				status: false
+			}
 		})
-	}
-
-	insertWork(work){
-		var tasks = this.state.tasks;
-		var newWork = {
-			id: this.guidGenerator(),
-			name: work.name.value,
-			status: work.status.checked
-		}
-		tasks.push(newWork); 
-		this.setState({
-			tasks: [...tasks]
-		});
-		this.setLocalStorageTasks(tasks);
 	}
 
 	deleteRowWork(id){
@@ -171,6 +163,7 @@ class ColunmRowApp extends Component {
 
 	btnUpdateWord(work){
 		var tasks = this.state.tasks;
+
 		var newWork = {
 			id: work.id.value,
 			name: work.name.value,
@@ -178,21 +171,33 @@ class ColunmRowApp extends Component {
 		}
 		tasks.forEach((item,index)=>{
 			if(item.id === work.id.value){
-				item.status = newWork;
+				tasks[index] = newWork;
 				return false;
 			}
 		})
+		
 		this.setState({
 			tasks: [...tasks]
 		});
 		this.setLocalStorageTasks(tasks);
 	}
 
+
 	render() {
+		var checkShow = this.state.weightRow === "8";
+		var elementShow = checkShow
+						? <PanelAdd 
+						changePanelAdd={this.changePanelAdd} 
+						btnUpdateWord={this.btnUpdateWord} 
+						objectTask={this.state.objectTask}  
+						apply={this.state.apply} 
+						insertWork={this.insertWork} />
+						:"";
+
 		return (
 			<div className="row">
 				<div className="col-xs-4 col-sm-4 col-md-4 col-lg-4" id="row-hidden-add">
-					<PanelAdd changePanelAdd={this.changePanelAdd} btnUpdateWord={this.btnUpdateWord} objectTask={this.state.objectTask}  apply={this.state.apply} insertWork={this.insertWork} />
+					{elementShow}
 				</div>
 				<div className={"col-xs-"+this.state.weightRow+ " col-sm-"+this.state.weightRow}>
 					<RowAdd number={this.state.weightRow} changeColumnRow={this.changeColumnRow} />

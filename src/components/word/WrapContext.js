@@ -4,10 +4,6 @@ import ColunmRowApp from './ColunmRowApp';
 
 class WrapContext extends Component {
 
-	constructor(props){
-		super(props);
-		
-	}
 
 	render() {
 

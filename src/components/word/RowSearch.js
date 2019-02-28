@@ -22,9 +22,9 @@ class RowSearch extends Component {
 						<button className="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Dropdown Example
 						<span className="caret"></span></button>
 						<ul className="dropdown-menu">
-						    <li><a>HTML</a></li>
-						    <li><a>CSS</a></li>
-						    <li><a>JavaScript</a></li>
+						    <li>HTML</li>
+						    <li>CSS</li>
+						    <li>JavaScript</li>
 						</ul>
 					</div>
 				</div>
