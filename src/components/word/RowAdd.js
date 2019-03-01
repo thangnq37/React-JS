@@ -4,7 +4,11 @@ class RowAdd extends Component {
 
 	changeColumnRow = (number) => {
 		if(number+'' === '8'){
-			this.props.changeColumnRow('12');
+			if(this.props.apply === true){
+				this.props.changeColumnRow('12');
+			}else{
+				this.props.changePanelAdd();
+			}
 		}else{
 			this.props.changeColumnRow('8');
 		}

@@ -147,6 +147,7 @@ class ColunmRowApp extends Component {
 		})
 	}
 
+
 	deleteRowWork(id){
 		var tasks = this.state.tasks;
 		tasks.forEach((item,index)=>{
@@ -200,7 +201,7 @@ class ColunmRowApp extends Component {
 					{elementShow}
 				</div>
 				<div className={"col-xs-"+this.state.weightRow+ " col-sm-"+this.state.weightRow}>
-					<RowAdd number={this.state.weightRow} changeColumnRow={this.changeColumnRow} />
+					<RowAdd number={this.state.weightRow} apply={this.state.apply} changePanelAdd={this.changePanelAdd} changeColumnRow={this.changeColumnRow} />
 					<br />
 					<RowSearch />
 					<br />
