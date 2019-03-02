@@ -2,6 +2,15 @@ import React, { Component } from 'react';
 
 class PanelTable extends Component {
 
+  constructor(props){
+  	super(props);
+  	this.state = {
+  		filterName: '',
+  		filterStatus: '0'
+  	}
+  	this.onChangeFilter = this.onChangeFilter.bind(this);
+  }
+
   btnUpdateRow = (id)=>{
   	this.props.updateRowWork(id);
   }
@@ -14,6 +23,19 @@ class PanelTable extends Component {
   	this.props.updateStatusWork(id);
   }
 
+  onChangeFilter(event){
+  	var target = event.target;
+  	var name = target.name;
+  	var value = target.value;
+  	var object = {
+  		filterName: (name==="filterName"?value:this.state.filterName),
+  		filterStatus: (name==="filterStatus"?value:this.state.filterStatus) 
+  	}
+  	this.props.filterDataWork(object);
+  	this.setState({
+  		[name] : value
+  	})
+  }
   render() {
   	var listData = this.props.listData;
   	var rowListData = listData.map((row,index)=>{
@@ -52,12 +74,13 @@ class PanelTable extends Component {
 						<tr>
 							<td></td>
 							<td>
-								<input type="text" name="" className="form-control" />
+								<input type="text" name="filterName" value={this.state.filterName} onChange={this.onChangeFilter} className="form-control" />
 							</td>
 							<td className="text-center">
-								<select name="" className="form-control" >
-									<option value={true}>Kích Hoạt</option>
-									<option value={false}>Xác Nhận</option>
+								<select name="filterStatus" className="form-control" value={this.state.filterStatus} onChange={this.onChangeFilter} >
+									<option value="0">Chọn</option>
+									<option value="-1">Kích Hoạt</option>
+									<option value="1">Xác Nhận</option>
 								</select>
 							</td>
 							<td className="text-center">	

@@ -21,6 +21,7 @@ class ColunmRowApp extends Component {
 		this.changePanelAdd = this.changePanelAdd.bind(this);
 		this.deleteRowWork = this.deleteRowWork.bind(this);
 		this.btnUpdateWord = this.btnUpdateWord.bind(this);
+		this.filterDataWork = this.filterDataWork.bind(this);
 	}
 
 
@@ -53,18 +54,22 @@ class ColunmRowApp extends Component {
 		this.setLocalStorageTasks(tasks);
 	}
 
+	getDataLocalStotage(){
+		return JSON.parse(localStorage.getItem("tasks"));
+	}
+
 	
 
 	componentDidMount(){
 		this.hiddenRowData(this.state.weightRow);
 		if(localStorage && localStorage.getItem("tasks")){
 			this.setState({
-				tasks: JSON.parse(localStorage.getItem("tasks"))
+				tasks: this.getDataLocalStotage()
 			})	
 		}else{
 			this.setDataTable();
 			this.setState({
-				tasks: JSON.parse(localStorage.getItem("tasks"))
+				tasks: this.getDataLocalStotage()
 			})
 		}
 	}
@@ -183,6 +188,36 @@ class ColunmRowApp extends Component {
 		this.setLocalStorageTasks(tasks);
 	}
 
+	filterDataWork(filter){
+		var listData = this.getDataLocalStotage();
+		var dataFilter = null;
+		if(filter.filterName !== ""){
+			dataFilter = listData.filter(function(row, index){
+				if(row.name.toLowerCase().indexOf(filter.filterName.toLowerCase()) >= 0){
+					return true;
+				}else{
+					return false;
+				}
+			})
+		}else{
+			dataFilter = listData;
+		}
+		if( filter.filterStatus !== "0"){
+			var check = filter.filterStatus === "-1"? true: false;
+			dataFilter = dataFilter.filter(function(row, index){
+				if(row.status === check){
+					return true;
+				}else{
+					return false;
+				}
+			})
+		}
+		this.setState({
+			tasks: [...dataFilter]
+		})
+
+	}
+
 
 	render() {
 		var checkShow = this.state.weightRow === "8";
@@ -205,7 +240,7 @@ class ColunmRowApp extends Component {
 					<br />
 					<RowSearch />
 					<br />
-					<PanelTable deleteRowWork={this.deleteRowWork} updateRowWork={this.updateRowWork} updateStatusWork={this.updateStatusWork} listData={this.state.tasks} />
+					<PanelTable filterDataWork={this.filterDataWork} deleteRowWork={this.deleteRowWork} updateRowWork={this.updateRowWork} updateStatusWork={this.updateStatusWork} listData={this.state.tasks} />
 				</div>
 			</div>
 		);
