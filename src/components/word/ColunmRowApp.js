@@ -12,7 +12,11 @@ class ColunmRowApp extends Component {
 			apply:true,//true add false update
 			weightRow: '12',
 			tasks: [],
-			objectTask: {}
+			objectTask: {
+				id: '',
+				name: "",
+				status: false
+			}
 		};
 		this.changeColumnRow = this.changeColumnRow.bind(this);
 		this.insertWork = this.insertWork.bind(this);
@@ -154,17 +158,21 @@ class ColunmRowApp extends Component {
 
 
 	deleteRowWork(id){
-		var tasks = this.state.tasks;
-		tasks.forEach((item,index)=>{
-			if(item.id === id){
-				tasks.splice(index,1);
-				return false;
-			}
-		})
-		this.setState({
-			tasks: [...tasks]
-		});
-		this.setLocalStorageTasks(tasks);
+		var windowConfirm = window.confirm("Bạn có muốn xóa không?");
+		if(windowConfirm){
+			var tasks = this.state.tasks;
+			tasks.forEach((item,index)=>{
+				if(item.id === id){
+					tasks.splice(index,1);
+					return false;
+				}
+			})
+			this.setState({
+				tasks: [...tasks]
+			});
+			this.setLocalStorageTasks(tasks);
+		}
+		
 	}
 
 	btnUpdateWord(work){
@@ -202,7 +210,7 @@ class ColunmRowApp extends Component {
 		}else{
 			dataFilter = listData;
 		}
-		if( filter.filterStatus !== "0"){
+		if( filter.filterStatus && filter.filterStatus !== "0"){
 			var check = filter.filterStatus === "-1"? true: false;
 			dataFilter = dataFilter.filter(function(row, index){
 				if(row.status === check){
@@ -216,6 +224,19 @@ class ColunmRowApp extends Component {
 			tasks: [...dataFilter]
 		})
 
+	}
+	
+	sort_by(field, reverse, primer){
+
+	   var key = primer ? 
+	       function(x) {return primer(x[field])} : 
+	       function(x) {return x[field]};
+
+	   reverse = !reverse ? 1 : -1;
+
+	   return function (a, b) {
+	       return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
+	     } 
 	}
 
 
@@ -238,7 +259,7 @@ class ColunmRowApp extends Component {
 				<div className={"col-xs-"+this.state.weightRow+ " col-sm-"+this.state.weightRow}>
 					<RowAdd number={this.state.weightRow} apply={this.state.apply} changePanelAdd={this.changePanelAdd} changeColumnRow={this.changeColumnRow} />
 					<br />
-					<RowSearch />
+					<RowSearch filterDataWork={this.filterDataWork} />
 					<br />
 					<PanelTable filterDataWork={this.filterDataWork} deleteRowWork={this.deleteRowWork} updateRowWork={this.updateRowWork} updateStatusWork={this.updateStatusWork} listData={this.state.tasks} />
 				</div>
