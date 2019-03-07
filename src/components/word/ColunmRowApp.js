@@ -4,6 +4,8 @@ import RowSearch from './RowSearch';
 import PanelAdd from './PanelAdd';
 import PanelTable from './PanelTable';
 
+import redux from './../../training/redux';
+
 class ColunmRowApp extends Component {
 
 	constructor(props){
@@ -26,6 +28,7 @@ class ColunmRowApp extends Component {
 		this.deleteRowWork = this.deleteRowWork.bind(this);
 		this.btnUpdateWord = this.btnUpdateWord.bind(this);
 		this.filterDataWork = this.filterDataWork.bind(this);
+		this.sort_data = this.sort_data.bind(this);
 	}
 
 
@@ -225,20 +228,34 @@ class ColunmRowApp extends Component {
 		})
 
 	}
-	
-	sort_by(field, reverse, primer){
 
-	   var key = primer ? 
-	       function(x) {return primer(x[field])} : 
-	       function(x) {return x[field]};
-
-	   reverse = !reverse ? 1 : -1;
-
-	   return function (a, b) {
-	       return a = key(a), b = key(b), reverse * ((a > b) - (b > a));
-	     } 
+	dynamicSort(property) {
+	    var sortOrder = 1;
+	    if(property[0] === "-") {
+	        sortOrder = -1;
+	        property = property.substr(1);
+	    }
+	    return function (a,b) {
+	        var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
+	        return result * sortOrder;
+	    }
 	}
 
+	sort_data(value){
+		var tasks = this.state.tasks;
+		if(value === 0){
+			tasks.sort(this.dynamicSort("name"));
+		}else if(value === 1){
+			tasks.sort(this.dynamicSort("-name"));
+		}else{
+			tasks.sort(this.dynamicSort("-status"));
+		}
+		this.setState({
+			tasks: [...tasks]
+		})
+	}
+
+	
 
 	render() {
 		var checkShow = this.state.weightRow === "8";
@@ -259,7 +276,7 @@ class ColunmRowApp extends Component {
 				<div className={"col-xs-"+this.state.weightRow+ " col-sm-"+this.state.weightRow}>
 					<RowAdd number={this.state.weightRow} apply={this.state.apply} changePanelAdd={this.changePanelAdd} changeColumnRow={this.changeColumnRow} />
 					<br />
-					<RowSearch filterDataWork={this.filterDataWork} />
+					<RowSearch sort_data={this.sort_data} filterDataWork={this.filterDataWork} />
 					<br />
 					<PanelTable filterDataWork={this.filterDataWork} deleteRowWork={this.deleteRowWork} updateRowWork={this.updateRowWork} updateStatusWork={this.updateStatusWork} listData={this.state.tasks} />
 				</div>

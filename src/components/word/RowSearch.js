@@ -9,8 +9,8 @@ class RowSearch extends Component {
   	};
   	this.props.filterDataWork(object);
   }
-  sortData = (status) =>{
-  	alert(status);
+  sortData(status){
+  	this.props.sort_data(status);
   }
 
   render() {
@@ -33,10 +33,10 @@ class RowSearch extends Component {
 						<button className="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Sắp Xếp
 						<span className="caret"></span></button>
 						<ul className="dropdown-menu">
-						    <li><a onClick={() => this.sortData(0)}>A -> Z</a></li>
-						    <li><a onClick={() => this.sortData(1)}>Z -> A</a></li>
+						    <li onClick={() => this.sortData(0)}>A -> Z</li>
+						    <li onClick={() => this.sortData(1)}>Z -> A</li>
 						    <li className="divider"></li>
-      						<li><a onClick={() =>  this.sortData(2)}>Kích hoạt</a></li>
+      						<li onClick={() =>  this.sortData(2)}>Kích hoạt</li>
 						</ul>
 					</div>
 				</div>
